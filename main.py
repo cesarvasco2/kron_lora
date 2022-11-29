@@ -109,6 +109,7 @@ def on_message(client, userdata, msg):
     dict_save['timestamp_dispositivo'] = int(datetime.now().timestamp())#int(format_date.timestamp())
     dict_save['dia_sem'] = calendar.day_name[dia_semana.weekday()]
     dict_save['macaddr'] = dict_payload['macAddr']
+    dict_save['gateway'] = dict_payload['gwid']
     dict_save['sinal_ruido'] = dict_payload['snr']
     dict_save['sinal'] = dict_payload['rssi']
 
