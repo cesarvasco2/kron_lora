@@ -7,7 +7,7 @@ from datetime import date, datetime
 import calendar
 import functions as f
 sqs = boto3.resource('sqs', region_name='us-east-1')
-queue = sqs.get_queue_by_name(QueueName='kronl_comandos')
+queue = sqs.get_queue_by_name(QueueName='processador_entrada')
 #configurações do broker:
 Broker = 'servermqtt.duckdns.org'
 PortaBroker = 1883
