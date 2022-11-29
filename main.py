@@ -7,7 +7,7 @@ from datetime import date, datetime
 import calendar
 import functions as f
 sqs = boto3.resource('sqs', region_name='us-east-1')
-queue = sqs.get_queue_by_name(QueueName='processador_entrada')
+queue = sqs.get_queue_by_name(QueueName='kronl_comandos')
 #configurações do broker:
 Broker = 'servermqtt.duckdns.org'
 PortaBroker = 1883
@@ -110,8 +110,8 @@ def on_message(client, userdata, msg):
     dict_save['dia_sem'] = calendar.day_name[dia_semana.weekday()]
     dict_save['macaddr'] = dict_payload['macAddr']
     dict_save['gateway'] = dict_payload['gwid']
-    dict_save['sinal_ruido'] = dict_payload['snr']
-    dict_save['sinal'] = dict_payload['rssi']
+    dict_save['sinal_ruido'] = str(dict_payload['snr'])
+    dict_save['sinal'] = str(dict_payload['rssi'])
 
     #Remove chaves vazias do dicionario
     remover_vazio = []
