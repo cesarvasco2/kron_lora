@@ -9,12 +9,12 @@ import functions as f
 sqs = boto3.resource('sqs', region_name='us-east-1')
 queue = sqs.get_queue_by_name(QueueName='processador_entrada')
 #configurações do broker:
-Broker = 'servermqtt.duckdns.org'
+Broker = 'mqtt.hidroview.com.br'
 PortaBroker = 1883
-Usuario = 'afira'
-Senha = 'afira'
+Usuario = 'kronprd'
+Senha = 'm3sJbRhqqRjbVCuM9dcGWuCt'
 KeepAliveBroker = 60
-TopicoSubscribe = 'GIOT-GW/#' #Topico que ira se inscrever
+TopicoSubscribe = 'GIOT-GW/UL/#' #Topico que ira se inscrever
 #Callback - conexao ao broker realizada
 def on_connect(client, userdata, flags, rc):
     print('[STATUS] Conectado ao Broker. Resultado de conexao: {}'.format(str(rc)))
@@ -26,44 +26,45 @@ def on_message(client, userdata, msg):
     #print("[MESAGEM RECEBIDA] Topico: "+msg.topic+" / Mensagem: "+mensagem_recebida)
     list_payload = json.loads(mensagem_recebida)
     dict_payload = list_payload[0]
+    #print(dict_payload)
     dict_data = json.loads(f.payload_converter(dict_payload['data']))
-    print(dict_data)
+    #print(dict_data)
     lista_de_campos = [
         {'key':'tensao_trifasica','type':'str','fields':'00'},
         {'key':'tensao','type':'str','fields':('01','02','03')},
         {'key':'tensao_fase_neutro','type':'str','fields':('04','05','06')},
         {'key':'corrente_trifasica','type':'str','fields':'07'},
         {'key':'corrente_neutro','type':'str','fields':'08'},
-        {'key':'corrente','type':'str','fields':('09','0A','0B')},
+        {'key':'corrente','type':'str','fields':('09','0a','0b')},
         {'key':'potencia_ativa_trifasica','type':'str','fields':'10'},
         {'key':'potencia_ativa_linha','type':'str','fields':('11','12','13')},
         {'key':'potencia_reativa_trifasica','type':'str','fields':'14'},
         {'key':'potencia_reativa_linha','type':'str','fields':('15','16','17')},
         {'key':'potencia_aparente_trifasica','type':'str','fields':'18'},
-        {'key':'potencia_aparente_linha','type':'str','fields':('19','1A','1B')},
-        {'key':'fator_potencia_trifasica','type':'str','fields':'1C'},
-        {'key':'fator_potencia_linha','type':'str','fields':('1D','1E','1F')},
+        {'key':'potencia_aparente_linha','type':'str','fields':('19','1a','1b')},
+        {'key':'fator_potencia_trifasica','type':'str','fields':'1c'},
+        {'key':'fator_potencia_linha','type':'str','fields':('1d','1e','1d')},
         {'key':'pulso','type':'pulso','fields':('24','25','26')},
-        {'key':'entradas_4a20','type':'4a20','fields':('2C','2D')},
-        {'key':'frequencia','type':'str','fields':('0C','0D','0E')},
-        {'key':'frequencia_iec_10s','type':'str','fields':'0F'},
-        {'key':'energia_ativa','type':'int','fields':'2E'},
+        {'key':'entradas_4a20','type':'4a20','fields':('2c','2d')},
+        {'key':'frequencia','type':'str','fields':('0c','0d','0e')},
+        {'key':'frequencia_iec_10s','type':'str','fields':'0f'},
+        {'key':'energia_ativa','type':'int','fields':'2e'},
         {'key':'energia_ativa_negativa','type':'int','fields':'30'},
-        {'key':'energia_reativa','type':'str','fields':'2F'},
+        {'key':'energia_reativa','type':'str','fields':'2f'},
         {'key':'energia_reativa_negativa','type':'str','fields':'31'},
         {'key':'maxima_demanda_ativa','type':'str','fields':'32'},
         {'key':'demanda_ativa','type':'str','fields':'33'},
         {'key':'maxima_demanda_aparente','type':'str','fields':'34'},
         {'key':'demanda_aparente','type':'str','fields':'35'},
         {'key':'temperatura','type':'str','fields':'47'},
-        {'key':'thd_tensao_fase','type':'str','fields':('3B','3C','3D')},
-        {'key':'thd_corrente_fase','type':'str','fields':('3E','3F','40')},
+        {'key':'thd_tensao_fase','type':'str','fields':('3b','3c','3d')},
+        {'key':'thd_corrente_fase','type':'str','fields':('3e','3f','40')},
         {'key':'ct_pulso','type':'int','fields':('24','25','26')},
         {'key':'status','type':'pulso','fields':('27','28','29')},
-        {'key':'rele','type':'int','fields':('2A','2B')},
+        {'key':'rele','type':'int','fields':('2a','2b')},
         {'key':'horimetro','type':'str','fields':('58',)},
         {'key':'status_carga','type':'int','fields':'57'},
-        {'key':'codigo_erro','type':'int','fields':'FF'},
+        {'key':'codigo_erro','type':'int','fields':'ff'},
     ]
     dia_semana = date.today() 
     data_e_hora_atuais = datetime.now() 
@@ -76,7 +77,6 @@ def on_message(client, userdata, msg):
             if campo['type']=='4a20':
                 for field in campo['fields']:
                     if field in dict_data:
-                        print ('entrei aqui')
                         elementos_do_campo.append(int(float(dict_data[field])*100))
             elif campo['type']=='array':
                 for field in campo['fields']:
