@@ -30,7 +30,7 @@ def on_message(client, userdata, msg):
     if data_length > 2:
     #print(dict_payload)
         dict_data = json.loads(f.payload_converter(dict_payload['data'][4:]))
-        print(dict_data)
+        #print(dict_data)
         lista_de_campos = [
             {'key':'tensao_trifasica','type':'str','fields':'00'},
             {'key':'tensao','type':'str','fields':('01','02','03')},
@@ -131,7 +131,7 @@ def on_message(client, userdata, msg):
         print(dict_save)    
         queue.send_message(MessageBody=str(json.dumps(dict_save, ensure_ascii=False)))
     else:
-        print('Pacote corrompido...')
+        print('Pacote corrompido ----> [' + dict_payload['data']+']', ',Timestamp: ' + str(int(datetime.now().timestamp())))
     #programa principal:
 try:
     print('[STATUS] Inicializando MQTT...')
